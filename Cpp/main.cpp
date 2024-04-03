@@ -1,11 +1,13 @@
 #include <iostream>
 #include <windows.h>
 #include <conio.h>
+#include <locale.h>
 #define WIDTH 21
-#define HEIGHT 14 //(было 13, должно быть 14(из-за этого ошибка))
-//Разобраться - почему съехала мапа(rdy)
-//гг не ходит вверх-вниз
-//съедает мапу
+#define HEIGHT 14
+//(Р±С‹Р»Рѕ 13, РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ 14(РёР·-Р·Р° СЌС‚РѕРіРѕ РѕС€РёР±РєР°))
+//Р Р°Р·РѕР±СЂР°С‚СЊСЃСЏ - РїРѕС‡РµРјСѓ СЃСЉРµС…Р°Р»Р° РјР°РїР°(rdy)
+//РіРі РЅРµ С…РѕРґРёС‚ РІРІРµСЂС…-РІРЅРёР·
+//СЃСЉРµРґР°РµС‚ РјР°РїСѓ
 char map[] =
 "#####################\n"
 "#                   #\n"
@@ -47,6 +49,8 @@ void ShowConsoleCursor(bool showF) {
 	GetConsoleCursorInfo(out, &cursorInfo);
 };
 int main() {
+	setlocale(LC_ALL, "Russian");
+	
 	using namespace std;
 
 	ShowConsoleCursor(false);
