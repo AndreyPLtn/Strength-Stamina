@@ -3,6 +3,9 @@
 #include <stdbool.h> 
 
 #define MF_MAX_TRACKS 10  // максимальное количество элементов (криков) в своей папке
+mf_info_t _folders[MF_MAX_TRACKS];
+
+int num_tracks = 0; // текущее количество записей криков
 
 // структура элемента (крика) Своей папки
 typedef struct {
