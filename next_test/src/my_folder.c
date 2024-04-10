@@ -16,7 +16,7 @@ int mf_get_count_track(const mf_info_t *info) {
 		}
 	}
 	return get_count_track; 
-} //получаем количество треков в папке
+} //считает количество криков в структуре _folders, возвращает количество
 
 int mf_get_info(int id, mf_info_t* info) { // Получаем информацию о треке
     if (id == 1) { //логика для крикотреков
