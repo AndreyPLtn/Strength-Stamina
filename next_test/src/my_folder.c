@@ -2,6 +2,12 @@
 
 static mf_info_t _folders[MF_MAX_TRACKS] = {0};
 
+void init_array(dynamic_array* arr) { // инициализирует динамический массив dynamic_array
+    arr->data = 0; //указатель на данные
+    arr->size = 0; //указатель на размер
+    arr->capacity = 0; //указатель на вместимость 
+} 
+
 int mf_get_count_track(const mf_info_t *info) {
 	int get_count_track = 0;
 	for(int i = 0; i < MF_MAX_TRACKS; i++) {
@@ -10,44 +16,45 @@ int mf_get_count_track(const mf_info_t *info) {
 		}
 	}
 	return get_count_track; 
-}
+} //получаем количество треков в папке
 
-int mf_get_info(int id, mf_info_t* info) {
-	struct stat info_struct;
-		if (stat("path to file", &info_struct) == 0) {
-			for(int i = 0; i < MF_MAX_TRACKS; i++) {
-				if (_folders[i].id == id) {
-					info->id_coll = _folders[i].size;
-					info->id_fold = _folders[i].last_modified;
-					info->id_track = _folders[i].id;
-					return 1; // успешно заполнено
-			}
-		}
-	}
-	return 0; //track не найден - возвращаем 0
-}
-
-int mf_add(mf_info_t* mf_info) {
-    if (num_tracks < MF_MAX_TRACKS) {
-        _folders[num_tracks] = *mf_info;
-        num_tracks++;
-        return 1; // если успешно добавлено
+int mf_get_info(int id, mf_info_t* info) { // Получаем информацию о треке
+    if (id == 1) { //логика для крикотреков
+        info->id_track; //можно присвоить № track и посмотреть его инф
+        strcpy(info->id_fold, "Folder location");
+        strcpy(info->id_coll, "Library");
+        return 1; // Возвращаем 1 в случае успешного получения информации
     } else {
-        return 0; // если достигнуто максимальное количество треков
+        return 0; // Возвращаем 0, если трек с заданным id не найден
     }
 }
 
-int mf_delete(int id_track) {
-    for (int i = 0; i < num_tracks; i++) {
-        if (_folders[i].id == id_track) {
-            for (int j = i; j < num_tracks - 1; j++) {
-                _folders[j] = _folders[j + 1];
-            }
-            num_tracks--;
-            return 1; // успешно удалено
-        }
+int mf_add(dynamic_array* arr, mf_info_t element) { //добавляем track
+    if (arr->size >= arr->capacity) {
+        arr->capacity = arr->capacity == 0 ? 1 : arr->capacity * 2; // Увеличивает вместимость
+        arr->data = realloc(arr->data, arr->capacity * sizeof(mf_info_t)); // Перевыделение памяти
     }
-    return 0; // трек с указанным id не найден
-}
+    arr->data[arr->size++] = element;
+	return 1; // успешное добавление
+} // добавить элемент в динамический массив
 
-void mf_reset() {}
+int mf_delete(dynamic_array* arr, int index) { //удаление элемента
+    if (index < 0 || index >= arr->size) {
+        printf("Error\n");
+        return;
+    }
+    for (int i = index; i < arr->size - 1; i++) {
+        arr->data[i] = arr->data[i + 1];
+    }
+    arr->size--;
+	return 1; //удаление успешно
+} 
+
+void mf_reset(mf_info_t* _folders, int id_track) { //функция сброса
+    for (int i = 0; i < id_track; i++) {
+        strcpy(_folders[i].id_track, "Default Folder");
+        _folders[i].id_fold = 0;
+		return 1; // успешно сброшено
+    }
+	return 0; // не сброшено
+}
