@@ -56,7 +56,10 @@ int mf_delete(int id) { // удаляет трек из _folders с освобо
     num_tracks--; // уменьшает кол-во треков
 
     _folders = (mf_info_t*)realloc(_folders, num_tracks * sizeof(mf_info_t)); // уменьшает количество выделенной памяти для _folders
-                                                                              // через функцию realloc
+        if (_folders == NULL) { // проверка _folders на равенство NULL
+            printf("Delete error"); // выводит ошибку
+            return -1; // возвращает -1
+    }
     return 0; // возврат 0 при успешном удалении
 }
 
