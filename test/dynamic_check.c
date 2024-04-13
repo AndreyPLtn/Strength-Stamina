@@ -13,7 +13,7 @@ typedef struct {
 	int id_track;  // ид крика
 } mf_info_t;
 
-static mf_info_t* _folders = NULL; // Изменение на указатель
+static mf_info_t* _folders = NULL;
 
 int num_tracks = 0;  // Переменная для хранения текущего количества треков
 
