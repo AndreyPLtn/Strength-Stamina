@@ -1,14 +1,12 @@
+#include <Windows.h>
 #include <iostream>
-#include <windows.h>
 #include <conio.h>
+#include <cstdlib>
 #include <locale.h>
+
 #define WIDTH 21
 #define HEIGHT 14
-//(было 13, должно быть 14(из-за этого ошибка))
-//Разобраться - почему съехала мапа(rdy)
-//гг не ходит вверх-вниз
-//съедает мапу
-//мобики рандомно не спавнятся
+
 char map[] =
 "#####################\n"
 "#                   #\n"
@@ -23,6 +21,7 @@ char map[] =
 "#                   #\n"
 "#                   #\n"
 "#####################\n";
+
 const int enemy_c = 5;
 const int armor_c = 3;
 bool isRun = true;
@@ -39,34 +38,37 @@ int a_pos_x[armor_c], a_pos_y[armor_c];
 void setxy(int x, int y, char c) {
 	map[y * WIDTH + x] = c;
 };
+
 void gotoxy(int x, int y) {
 	COORD pos = { x, y };
 	HANDLE output = GetStdHandle(STD_OUTPUT_HANDLE);
 	SetConsoleCursorPosition(output, pos);
 };
+
 void ShowConsoleCursor(bool showF) {
 	HANDLE out = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_CURSOR_INFO cursorInfo;
 	GetConsoleCursorInfo(out, &cursorInfo);
 };
+
 int main() {
 	setlocale(LC_ALL, "Russian");
-	
+
 	using namespace std;
 
 	ShowConsoleCursor(false);
 	for (int i = 0; i < enemy_c; ++i) {
-		e_pos_x[i] = i + (rand() % (WIDTH - 3));
-		e_pos_y[i] = i + (rand() % (HEIGHT - 2));
+		e_pos_x[i] = 1 + (rand() % (WIDTH - 3));
+		e_pos_y[i] = 1 + (rand() % (HEIGHT - 2));
 		enemy[i] = 'E';
 	}
 	for (int i = 0; i < armor_c; ++i) {
-		a_pos_x[i] = i + (rand() % (WIDTH - 3));
-		a_pos_y[i] = i + (rand() % (HEIGHT - 2));
+		a_pos_x[i] = 1 + (rand() % (WIDTH - 3));
+		a_pos_y[i] = 1 + (rand() % (HEIGHT - 2));
 		armor[i] = 'A';
 	}
 	while (isRun) {
-		for (int i = 0; i < armor_c; ++i) {
+		for (int i = 0; i < enemy_c; ++i) {
 			setxy(e_pos_x[i], e_pos_y[i], enemy[i]);
 			enemy[i] = 'E';
 		}
@@ -127,6 +129,7 @@ int main() {
 				hp = arm > 0 ? hp : hp - 10;
 				if (hp <= 0) {
 					player = 'X';
+					isRun = false; // проигрыш
 				}
 			}
 			if (p_pos_x == a_pos_x[i] && p_pos_y == a_pos_y[i] && armor[i] != enemy[i]) {
@@ -134,11 +137,11 @@ int main() {
 				score += 5;
 				arm = arm + 50 > 100 ? 100 : arm + 50;
 			}
-			if (enemy[i] != 'X') {
-				no_enemy_f = false;
-			}
+			if (hp <= 0) { // проверка на луз
+				player = 'X';
+				isRun = false;
+			}				
 		}
 	}
 }
-
 
