@@ -31,17 +31,23 @@ int mf_get_info(int id, mf_info_t* info) {
     return 0; // возвращает 0 при успехе
 }
 
-int mf_add(mf_info_t* mf_info) { // добавление нового 
-    if (num_tracks == MF_MAX_TRACKS) { // проверка на заполненность в MF_MAX_TRACKS
-        printf("Error: Not enough free space"); // выводит ошибку при недостающем места 
-        return -1; // возврат -1
+int mf_add(mf_info_t* mf_info) { // добавление нового крика 
+    if (num_tracks == MF_MAX_TRACKS) { // проверка на максимальное значение криков
+        printf("Error: Not enough free space");
+        return -1; // выводит -1 при отсутствии места
     }
 
-    _folders = (mf_info_t*)realloc(_folders, (num_tracks + 1) * sizeof(mf_info_t)); // увеличение памяти на 1 элемент
-    _folders[num_tracks] = *mf_info; // копирует инф-ю о новом num_track в последний элемент _folders
-    num_tracks++; // +1 указывает на добавление нового num_tracks
+    mf_info_t* temp = (mf_info_t*)realloc(_folders, (num_tracks + 1) * sizeof(mf_info_t)); // изменяет размер выделенной памяти для _folders
+    if (temp == NULL) {
+        printf("Memory reallocation error");
+        return -1; // выводит -1 при переполнении
+    }
 
-    return num_tracks - 1; // Возвращаем индекс добавленного трека
+    _folders = temp; // присваивает временную переменную в _folders (свидетельство успешного выделения памяти)
+    _folders[num_tracks] = *mf_info; // помещает информацию mf_info в последний элемент _folders[]
+    num_tracks++; // увеличение счетчика на 1
+
+    return num_tracks - 1; // возврат index нового элемента
 }
 
 int mf_delete(int id) { // удаляет трек из _folders с освобождением памяти
