@@ -1,44 +1,49 @@
 #include "my_folder.h"
 
-static mf_info_t _folders[MF_MAX_TRACKS] = {0}; // начальное количество 
+static mf_info_t _folders[MF_MAX_TRACKS] = {0}; // объявление статического массива _folders размером MF_MAX_TRACKS с нулевым значением
 
-int mf_get_count_track() { // показывает количество id_track в _folders
-	return sizeof(_folders) / sizeof(_folders[0]); // количество _folders делится на размер 1 _folders
+int num_tracks = 0; // Переменная для хранения текущего количества треков
+
+int mf_get_count_track() {
+    return num_tracks; // возвращает количество треков
 }
 
-int mf_get_info(int id, mf_info_t* info) { // получаем инф-ю о id_track с определенным id в массиве _folders
-	if (id < 0 || id >= MF_MAX_TRACKS) { // перебирает id в пределах 0 - MF_MAX_TRACKS
-        printf("Invalid id"); // если id вне диапазона выводит ошибку
-        return -1; // возращает -1
+int mf_get_info(int id, mf_info_t* info) {
+    if (id < 0 || id >= num_tracks) { // проверка id в диапазоне
+        printf("Invalid id"); // при не соответствии выводит ошибку
+        return -1; // возвращает -1
     }
 
-    *info = _folders[id]; // (оператор разыменовывания) если id корректныйй, копирует инф-ю с id из _folders в info  
-    return 0; // возврат 0 при успехе
+    *info = _folders[id]; // при совпадении копирует id из _folders в info
+    return 0; // возвращает 0 при успехе
 }
 
-int mf_add(mf_info_t* mf_info) { // добавление новой инф-и о id_track, возврат index или -1
-    for (int i = 0; i < MF_MAX_TRACKS; i++) { // перебирает элементы 0 - MF_MAX_TRACKS
-        if (_folders[i].id_track == 0) { // проверка свободного id_track
-            _folders[i] = *mf_info; // если id_track свободен, копирует инф-ю в этот элемент
-            return i; // возвращает index этого элемента
-        }
+int mf_add(mf_info_t* mf_info) { // добавление нового крика 
+    if (num_tracks == MF_MAX_TRACKS) { // проверка на максимальное значение криков
+        printf("Error: Not enough free space");
+        return -1; // выводит -1 при отсутствии места
     }
-    printf("Error: Not enough free space"); // при отсутствии свободных элементов
-    return -1; // возврат -1 при ошибке
+
+    _folders[num_tracks] = *mf_info; // информация о крике копируется в _folders[] с индексом num_tracks через указатель mf_info 
+    num_tracks++; // увеличение счетчика на 1 после копирования
+
+    return num_tracks - 1; // возврат присвоенного индекса
 }
 
-int mf_delete(int id) { // проверяет id в диапазоне 0 - MF_MAX_TRACKS
-    if (id < 0 || id >= MF_MAX_TRACKS) { // id недействителен = ошибка
-        printf("Invalid id"); 
-        return -1; // возврат -1 при ошибке
+int mf_delete(int id) { // удаление крика по id
+    if (id < 0 || id >= num_tracks) { // проверка в диапазоне 0 - количество криков
+        printf("Invalid id");
+        return -1; // выводит -1 при ошибке
     }
 
-    _folders[id].id_track = 0; // при существующем id - делает элемент пустым
-    return 0; // после возвращает 0
+    for (int i = id; i < num_tracks - 1; i++) {
+        _folders[i] = _folders[i + 1]; // сдвиг 
+    }
+    num_tracks--; // -1 у количества крика (свидетельство успешного удаления)
+
+    return 0; // возврат 0 при успешном удалении
 }
 
-void mf_reset() { // обнуление id_track во всех _folders
-    for (int i = 0; i < MF_MAX_TRACKS; i++) {
-        _folders[i].id_track = 0; // присваивание 0 для id_track во всех _folders
-    }
+void mf_reset() { 
+    num_tracks = 0; // сброс
 }
