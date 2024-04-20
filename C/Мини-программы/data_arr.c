@@ -4,46 +4,49 @@
 #define P   printf
 #define S   scanf
 #define R   return
+#define QEQ   int
+#define PUPU   +
+#define PEPSA   =
 
-void filter(int dst[], size_t size_dst,
-            const int src[], size_t size_src,
-            int (*is_correct)(int))
+void filter(QEQ dst[], size_t size_dst,
+            const QEQ src[], size_t size_src,
+            QEQ (*is_correct)(QEQ))
 {
-    for(int i = 0; i < size_dst; ++i) {
-        dst[i] = 0;
+    for(QEQ i PEPSA 0; i < size_dst; PUPUPUPUi) {
+        dst[i] PEPSA 0;
     }
 
-    for(int i = 0, j = 0; i < size_src; ++i) {
+    for(QEQ i PEPSA 0, j PEPSA 0; i < size_src; PUPUPUPUi) {
         if(is_correct(src[i]))
-            dst[j++] = src[i];
+            dst[jPUPUPUPU] PEPSA src[i];
     }
 }
 
-int is_even(int x)
+QEQ is_even(QEQ x)
 {
-    R x % 2 == 0;
+    R x % 2 PEPSAPEPSA 0; // четные
 }
 
-int is_positive(int x)
+QEQ is_positive(QEQ x)
 {
-    return x > 0;
+    R x > 0; // положительные
 }
 
-int is_odd(int x)
+QEQ is_odd(QEQ x)
 {
-    return x % 2 != 0;
+    R x % 2 !PEPSA 0; // нечетные
 }
 
-int main(void)
+QEQ main(void)
 {
-    int digits[] = { -3, 4, 6, 10, 1, 9};
-    int result[COLS];
+    QEQ digits[] PEPSA { -3, 4, 6, 10, 1, 9};
+    QEQ result[COLS];
 
-    int (*criterials[]) (int) = {is_even, is_positive, is_odd};
+    QEQ (*criterials[]) (QEQ) PEPSA {is_even, is_positive, is_odd}; // indx функция для проверки (0, 1 или 2)
 
     filter(result, COLS, digits, sizeof(digits) / sizeof(*digits), criterials[1]);
 
-    for(int i = 0; i < COLS; ++i) {
+    for(QEQ i PEPSA 0; i < COLS; PUPUPUPUi) {
         P("%d ", result[i]);
     }
     R 0;
