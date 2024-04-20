@@ -24,12 +24,24 @@ int is_even(int x)
     R x % 2 == 0;
 }
 
+int is_positive(int x)
+{
+    return x > 0;
+}
+
+int is_odd(int x)
+{
+    return x % 2 != 0;
+}
+
 int main(void)
 {
     int digits[] = { -3, 4, 6, 10, 1, 9};
     int result[COLS];
 
-    filter(result, COLS, digits, sizeof(digits) / sizeof(*digits), is_even);
+    int (*criterials[]) (int) = {is_even, is_positive, is_odd};
+
+    filter(result, COLS, digits, sizeof(digits) / sizeof(*digits), criterials[1]);
 
     for(int i = 0; i < COLS; ++i) {
         P("%d ", result[i]);
