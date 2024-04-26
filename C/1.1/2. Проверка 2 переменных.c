@@ -1,7 +1,6 @@
 #include <stdio.h>
 #include <locale.h> // Подключение прочих языков
 
-#pragma warning(suppress : 4996) // позволяет включить устаревшие функции
 
 int main() { //программа на проверку >, < или = чисел
     setlocale(LC_ALL, "Rus");
