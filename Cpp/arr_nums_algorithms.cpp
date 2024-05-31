@@ -1,4 +1,4 @@
-//processing and analyzing data in an array of numbers using standard C++ algorithms
+// 05.31 processing and analyzing data in an array of numbers using standard C++ algorithms
 #include <iostream>
 #include <vector>
 #include <algorithm>
